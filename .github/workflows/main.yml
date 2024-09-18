@@ -29,31 +29,22 @@ jobs:
 
   test1:
     runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.step1.outputs.pr_number }}
     steps:
-      - name: Get PR number
+      - name: step1
         run: |
           echo ${REF_NAME##*-}
           echo "pr_number=${REF_NAME##*-}" >> $GITHUB_OUTPUT
           echo "test=hello" >> $GITHUB_OUTPUT
         env:
-          REF_NAME: ${{ github.ref_name }}
-
-  test2:
-    runs-on: ubuntu-latest
-    needs:
-      - test1
-    steps:
-      - name: Test2
-        run: |
-          echo $TEST2
-        env:
-          TEST2: ${{ needs.test1.outputs.test }}    
+          REF_NAME: ${{ github.ref_name }}   
   
   check-pr-description:
     needs:
       - test1
     uses: ./.github/workflows/test.yml
     with:
-      pr_number: ${{ needs.test1.outputs.test }}
+      pr_number: ${{ needs.test1.outputs.pr_number }}
     secrets: inherit
 
