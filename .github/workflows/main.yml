@@ -7,41 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
-      output2: ${{ steps.step2.outputs.test }}
-    steps:
-      - id: step1
-        run: echo "test=hello" >> "$GITHUB_OUTPUT"
-      - id: step2
-        run: echo "test=world" >> "$GITHUB_OUTPUT"
-  job2:
-    runs-on: ubuntu-latest
-    needs: job1
-    steps:
-      - env:
-          OUTPUT1: ${{needs.job1.outputs.output1}}
-          OUTPUT2: ${{needs.job1.outputs.output2}}
-        run: echo "$OUTPUT1 $OUTPUT2"
-
-  test1:
+  get-pr-number:
     runs-on: ubuntu-latest
     outputs:
-      pr_number: ${{ steps.step1.outputs.pr_number }}
+      pr_number: ${{ steps.get_pr_number.outputs.pr_number }}
     steps:
-      - id: step1
+      - id: get_pr_number
         run: echo "pr_number=${REF_NAME##*-}" >> "$GITHUB_OUTPUT"
         env:
           REF_NAME: ${{ github.ref_name }}   
   
   check-pr-description:
     needs:
-      - test1
+      - get-pr-number
     uses: ./.github/workflows/test.yml
     with:
-      pr_number: ${{ needs.test1.outputs.pr_number }}
+      pr_number: ${{ needs.get-pr-number.outputs.pr_number }}
     secrets: inherit
 
