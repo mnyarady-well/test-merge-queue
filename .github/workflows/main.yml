@@ -10,6 +10,6 @@ jobs:
   check-pr-description:
     uses: ./.github/workflows/test.yml
     with:
-      ref_name: ${{ github.ref_name }}
+      pr_number: $(echo ${{ github.ref_name }##*-})
     secrets: inherit
 
