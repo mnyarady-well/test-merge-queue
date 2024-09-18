@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get PR number
         run: |
-          echo "::set-output name=pr_number::${REF_NAME##*/}"
+          echo "pr_number=${REF_NAME##*-}" >> $GITHUB_OUTPUT
         env:
           REF_NAME: ${{ github.ref_name }}
   
