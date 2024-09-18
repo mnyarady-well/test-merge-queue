@@ -16,3 +16,5 @@ jobs:
         run: |
           PR_NUMBER=$(echo ${REF_NAME##*-})
           echo $PR_NUMBER
+        env:
+          REF_NAME: ${{ inputs.ref_name }}
