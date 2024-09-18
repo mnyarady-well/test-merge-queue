@@ -1,0 +1,15 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+jobs:
+  check-pr-description:
+    uses: ./.github/workflows/test.yml
+    with:
+      ref_name: ${{ github.ref_name }}
+    secrets: inherit
+
