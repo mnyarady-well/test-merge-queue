@@ -33,10 +33,7 @@ jobs:
       pr_number: ${{ steps.step1.outputs.pr_number }}
     steps:
       - name: step1
-        run: |
-          echo ${REF_NAME##*-}
-          echo "pr_number=${REF_NAME##*-}" >> $GITHUB_OUTPUT
-          echo "test=hello" >> $GITHUB_OUTPUT
+        run: echo "pr_number=${REF_NAME##*-}" >> "$GITHUB_OUTPUT"
         env:
           REF_NAME: ${{ github.ref_name }}   
   
