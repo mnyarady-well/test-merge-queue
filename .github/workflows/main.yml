@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-pr-number:
+  test1:
     runs-on: ubuntu-latest
     steps:
       - name: Get PR number
@@ -20,9 +20,9 @@ jobs:
   
   check-pr-description:
     needs:
-      - get-pr-number
+      - test1
     uses: ./.github/workflows/test.yml
     with:
-      pr_number: ${{ needs.get-pr-number.outputs.test }}
+      pr_number: ${{ needs.test1.outputs.test }}
     secrets: inherit
 
