@@ -7,9 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  get-pr-number:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.get_pr_number.outputs.pr_number }}
+    steps:
+      - id: get_pr_number
+        run: echo "pr_number=${REF_NAME##*-}" >> "$GITHUB_OUTPUT"
+        env:
+          REF_NAME: ${{ github.ref_name }}   
+  
   check-pr-description:
+    needs:
+      - get-pr-number
     uses: ./.github/workflows/test.yml
     with:
-      pr_number: $(echo ${{ github.ref_name }##*-})
+      pr_number: ${{ needs.get-pr-number.outputs.pr_number }}
     secrets: inherit
 
